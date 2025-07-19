@@ -144,15 +144,22 @@
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
 
-        .repo-button:hover {
+        .repo-button:hover:not([disabled]) {
             background-color: var(--primary-hover);
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
         }
 
-        .repo-button:active {
+        .repo-button:active:not([disabled]) {
             transform: translateY(0);
             box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .repo-button[disabled] {
+            background-color: #cccccc; /* Grey out disabled buttons */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         .info-button {
@@ -340,9 +347,8 @@
 
             <div class="repo-item">
                 <div class="repo-buttons-wrapper">
-                    <a href="#" class="repo-button"><i class="fas fa-code-branch"></i> My Portfolio</a>
-                    <button class="info-button" data-repo-id="my-portfolio" aria-label="Info about My Portfolio"><i class="fas fa-info-circle"></i></button>
-                </div>
+                    <a href="#" class="repo-button" disabled><i class="fas fa-code-branch"></i> My Portfolio</a>
+                    </div>
                 <div class="dropdown-description" data-repo-id="my-portfolio" hidden>
                     This is my personal portfolio website, showcasing a collection of my best work and skills.
                 </div>
@@ -350,9 +356,8 @@
 
             <div class="repo-item">
                 <div class="repo-buttons-wrapper">
-                    <a href="#" class="repo-button"><i class="fas fa-code-branch"></i> Data Project</a>
-                    <button class="info-button" data-repo-id="data-project" aria-label="Info about Data Project"><i class="fas fa-info-circle"></i></button>
-                </div>
+                    <a href="#" class="repo-button" disabled><i class="fas fa-code-branch"></i> Data Project</a>
+                    </div>
                 <div class="dropdown-description" data-repo-id="data-project" hidden>
                     A project focused on data analysis and visualization using Python libraries like Pandas and Matplotlib.
                 </div>
