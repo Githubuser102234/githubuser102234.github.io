@@ -19,6 +19,8 @@
             --shadow-medium: rgba(0, 0, 0, 0.1);
             --dropdown-background: #f8f9fa; /* Light background for dropdown */
             --dropdown-border: #ced4da;
+            --disabled-dark-color: #34495e; /* Darker color for disabled-like buttons */
+            --disabled-dark-hover: #2c3e50;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -35,6 +37,8 @@
                 --shadow-medium: rgba(0, 0, 0, 0.4);
                 --dropdown-background: #3a3a3a;
                 --dropdown-border: #555;
+                --disabled-dark-color: #34495e;
+                --disabled-dark-hover: #2c3e50;
             }
         }
 
@@ -144,23 +148,34 @@
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
 
-        .repo-button:hover:not([disabled]) {
+        .repo-button:hover {
             background-color: var(--primary-hover);
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
         }
 
-        .repo-button:active:not([disabled]) {
+        .repo-button:active {
             transform: translateY(0);
             box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
         }
 
-        .repo-button[disabled] {
-            background-color: #cccccc; /* Grey out disabled buttons */
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
+        /* Styling for "disabled-like" buttons */
+        .repo-button.disabled-look {
+            background-color: var(--disabled-dark-color);
+            box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3); /* Adjust shadow for disabled look */
         }
+
+        .repo-button.disabled-look:hover {
+            background-color: var(--disabled-dark-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 73, 94, 0.4);
+        }
+
+        .repo-button.disabled-look:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(52, 73, 94, 0.2);
+        }
+
 
         .info-button {
             background-color: var(--info-button-color);
@@ -347,8 +362,9 @@
 
             <div class="repo-item">
                 <div class="repo-buttons-wrapper">
-                    <a href="#" class="repo-button" disabled><i class="fas fa-code-branch"></i> My Portfolio</a>
-                    </div>
+                    <a href="#" id="myPortfolioButton" class="repo-button disabled-look"><i class="fas fa-code-branch"></i> My Portfolio</a>
+                    <button class="info-button" data-repo-id="my-portfolio" aria-label="Info about My Portfolio"><i class="fas fa-info-circle"></i></button>
+                </div>
                 <div class="dropdown-description" data-repo-id="my-portfolio" hidden>
                     This is my personal portfolio website, showcasing a collection of my best work and skills.
                 </div>
@@ -356,8 +372,9 @@
 
             <div class="repo-item">
                 <div class="repo-buttons-wrapper">
-                    <a href="#" class="repo-button" disabled><i class="fas fa-code-branch"></i> Data Project</a>
-                    </div>
+                    <a href="#" id="dataProjectButton" class="repo-button disabled-look"><i class="fas fa-code-branch"></i> Data Project</a>
+                    <button class="info-button" data-repo-id="data-project" aria-label="Info about Data Project"><i class="fas fa-info-circle"></i></button>
+                </div>
                 <div class="dropdown-description" data-repo-id="data-project" hidden>
                     A project focused on data analysis and visualization using Python libraries like Pandas and Matplotlib.
                 </div>
@@ -378,6 +395,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const infoButtons = document.querySelectorAll('.info-button');
+            const myPortfolioButton = document.getElementById('myPortfolioButton');
+            const dataProjectButton = document.getElementById('dataProjectButton');
 
             infoButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -402,6 +421,18 @@
                         }
                     });
                 });
+            });
+
+            // Add event listener for "My Portfolio" button
+            myPortfolioButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                alert('My portfolio is not finished yet');
+            });
+
+            // Add event listener for "Data Project" button
+            dataProjectButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                alert('Data Project isn’t available');
             });
         });
     </script>
