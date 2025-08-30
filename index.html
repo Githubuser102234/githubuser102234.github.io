@@ -176,7 +176,6 @@
             box-shadow: 0 2px 10px rgba(52, 73, 94, 0.2);
         }
 
-
         .info-button {
             background-color: var(--info-button-color);
             box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
@@ -227,7 +226,6 @@
             visibility: visible;
             transform: translateY(0);
         }
-
 
         .social-links {
             margin-top: 40px;
@@ -320,120 +318,102 @@
         </header>
 
         <section class="button-grid">
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="https://www.chatvana.xyz" class="repo-button"><i class="fas fa-code-branch"></i> ChatVana</a>
-                    <button class="info-button" data-repo-id="project-one" aria-label="Info about Project One"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="project-one" hidden>
-                    This is a detailed description of Project One. It covers HTML, CSS, and basic JavaScript.
-                </div>
-            </div>
-
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="https://githubuser102234.github.io/Notes/#" class="repo-button"><i class="fas fa-code-branch"></i> Notes</a>
-                    <button class="info-button" data-repo-id="project-two" aria-label="Info about Project Two"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="project-two" hidden>
-                    Project Two focuses on Python scripting and data manipulation. It includes examples of file I/O and basic algorithms.
-                </div>
-            </div>
-
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="https://githubuser102234.github.io/ripofftwitter/" class="repo-button"><i class="fas fa-code-branch"></i> Ripofftwitter</a>
-                    <button class="info-button" data-repo-id="project-three" aria-label="Info about Project Three"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="project-three" hidden>
-                    A web development project demonstrating responsive design principles and front-end frameworks.
-                </div>
-            </div>
-
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="https://githubuser102234.github.io/PhotoMaker" class="repo-button"><i class="fas fa-code-branch"></i> PhotoMaker</a>
-                    <button class="info-button" data-repo-id="PhotoMaker" aria-label="Info about Another Repo"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="another-repo" hidden>
-                    This repository contains miscellaneous code snippets and experimental features.
-                </div>
-            </div>
-
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="#" id="myPortfolioButton" class="repo-button disabled-look"><i class="fas fa-code-branch"></i> My Portfolio</a>
-                    <button class="info-button" data-repo-id="my-portfolio" aria-label="Info about My Portfolio"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="my-portfolio" hidden>
-                    This is my personal portfolio website, showcasing a collection of my best work and skills.
-                </div>
-            </div>
-
-            <div class="repo-item">
-                <div class="repo-buttons-wrapper">
-                    <a href="#" id="dataProjectButton" class="repo-button disabled-look"><i class="fas fa-code-branch"></i> Data Project</a>
-                    <button class="info-button" data-repo-id="data-project" aria-label="Info about Data Project"><i class="fas fa-info-circle"></i></button>
-                </div>
-                <div class="dropdown-description" data-repo-id="data-project" hidden>
-                    A project focused on data analysis and visualization using Python libraries like Pandas and Matplotlib.
-                </div>
-            </div>
-        </section>
+            </section>
 
         <section class="social-links">
-            <a href="https://github.com/yourusername" target="_blank" class="social-link" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
-            <a href="https://twitter.com/yourusername" target="_blank" class="social-link" aria-label="Twitter Profile"><i class="fab fa-twitter"></i></a>
+            <a href="https://github.com/Githubuser102234" target="_blank" class="social-link" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
         </section>
 
         <footer>
-            <p>&copy; 2025 Your Name. All rights reserved.</p>
+            <p>&copy; 2025 Githubuser102234. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const infoButtons = document.querySelectorAll('.info-button');
-            const myPortfolioButton = document.getElementById('myPortfolioButton');
-            const dataProjectButton = document.getElementById('dataProjectButton');
+            const username = 'Githubuser102234';
+            const repoGrid = document.querySelector('.button-grid');
 
-            infoButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const repoId = this.dataset.repoId;
-                    const dropdown = document.querySelector(`.dropdown-description[data-repo-id="${repoId}"]`);
+            // Function to fetch repositories
+            async function fetchRepositories() {
+                try {
+                    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=100`);
+                    if (!response.ok) {
+                        throw new Error(`GitHub API error: ${response.statusText}`);
+                    }
+                    const repos = await response.json();
+                    
+                    // Filter out forks and repositories without a description
+                    const mainRepos = repos.filter(repo => !repo.fork && repo.description);
 
-                    // Toggle the 'show' class to control visibility and animation
-                    dropdown.classList.toggle('show');
-
-                    // Toggle the 'hidden' attribute for accessibility
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.removeAttribute('hidden');
-                    } else {
-                        dropdown.setAttribute('hidden', '');
+                    if (mainRepos.length === 0) {
+                        repoGrid.innerHTML = '<p>No repositories found or all repositories are forks/missing descriptions.</p>';
+                        return;
                     }
 
-                    // Close other dropdowns if open
-                    document.querySelectorAll('.dropdown-description.show').forEach(openDropdown => {
-                        if (openDropdown !== dropdown) {
-                            openDropdown.classList.remove('show');
-                            openDropdown.setAttribute('hidden', '');
+                    displayRepositories(mainRepos);
+                } catch (error) {
+                    console.error('Failed to fetch repositories:', error);
+                    repoGrid.innerHTML = `<p>Error loading repositories. Please try again later.</p>`;
+                }
+            }
+
+            // Function to display repositories
+            function displayRepositories(repos) {
+                repos.forEach(repo => {
+                    const repoItem = document.createElement('div');
+                    repoItem.className = 'repo-item';
+                    
+                    const repoHTML = `
+                        <div class="repo-buttons-wrapper">
+                            <a href="${repo.html_url}" class="repo-button" target="_blank">
+                                <i class="fas fa-code-branch"></i> ${repo.name}
+                            </a>
+                            <button class="info-button" data-repo-id="${repo.name}" aria-label="Info about ${repo.name}">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        <div class="dropdown-description" data-repo-id="${repo.name}" hidden>
+                            ${repo.description || 'No description provided.'}
+                        </div>
+                    `;
+                    
+                    repoItem.innerHTML = repoHTML;
+                    repoGrid.appendChild(repoItem);
+                });
+
+                addEventListeners();
+            }
+
+            // Function to add event listeners to dynamically created buttons
+            function addEventListeners() {
+                const infoButtons = document.querySelectorAll('.info-button');
+                infoButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const repoId = this.dataset.repoId;
+                        const dropdown = document.querySelector(`.dropdown-description[data-repo-id="${repoId}"]`);
+
+                        // Close all other open dropdowns
+                        document.querySelectorAll('.dropdown-description.show').forEach(openDropdown => {
+                            if (openDropdown !== dropdown) {
+                                openDropdown.classList.remove('show');
+                                openDropdown.setAttribute('hidden', '');
+                            }
+                        });
+
+                        // Toggle the current dropdown
+                        dropdown.classList.toggle('show');
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.removeAttribute('hidden');
+                        } else {
+                            dropdown.setAttribute('hidden', '');
                         }
                     });
                 });
-            });
+            }
 
-            // Add event listener for "My Portfolio" button
-            myPortfolioButton.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent default link behavior
-                alert('My portfolio is not finished yet');
-            });
-
-            // Add event listener for "Data Project" button
-            dataProjectButton.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent default link behavior
-                alert('Data Project isn’t available');
-            });
+            // Call the fetch function to start the process
+            fetchRepositories();
         });
     </script>
 </body>
